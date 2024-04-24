@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CircuitoRLC</string>
+    <string name="Titulo">Bienvenido a nuestra aplicacion</string>
+    <string name="Sub_Titulo">Permite graficar la respuesta natural de un Circuito RLC</string>
+    <string name="Opciones">Selecione el tipo de Circuito:</string>
+    <string name="Serie">Serie</string>
+    <string name="Paralelo">Paralelo</string>
+    <string name="Resistencia">Resistencia (R):</string>
+    <string name="Inductor">Inductor (L):</string>
+    <string name="Capacitor">Capacitor (C):</string>
+    <string name="Corriente">Corriente Inicial en L:</string>
+    <string name="Voltaje">Voltaje Inicial en C:</string>
+    <string name="TipoCircuito">Tipo de Circuito:</string>
+</resources>
