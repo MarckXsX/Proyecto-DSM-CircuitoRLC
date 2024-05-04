@@ -4,11 +4,14 @@
     <string name="Sub_Titulo">Permite graficar la respuesta natural de un Circuito RLC</string>
     <string name="Opciones">Selecione el tipo de Circuito:</string>
     <string name="Serie">Serie</string>
-    <string name="Paralelo">Paralelo</string>
-    <string name="Resistencia">Resistencia (R):</string>
-    <string name="Inductor">Inductor (L):</string>
-    <string name="Capacitor">Capacitor (C):</string>
-    <string name="Corriente">Corriente Inicial en L:</string>
-    <string name="Voltaje">Voltaje Inicial en C:</string>
+    <string name="Resistencia">Resistencia (Ohm):</string>
+    <string name="Inductor">Inductor (H):</string>
+    <string name="Capacitor">Capacitor (F):</string>
+    <string name="Corriente">Corriente Inicial en L(A):</string>
+    <string name="Voltaje">Voltaje Inicial en C (V):</string>
     <string name="TipoCircuito">Tipo de Circuito:</string>
+    <!--> Activity de circuito paralelo </-->
+    <string name="Paralelo">Paralelo</string>
+    <string name="Btn_Calcular">Mostrar grafica</string>
+    <string name="Lbl_Tiempo">Tiempo final (s)</string>
 </resources>
