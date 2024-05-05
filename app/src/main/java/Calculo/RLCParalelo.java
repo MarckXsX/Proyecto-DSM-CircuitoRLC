@@ -51,9 +51,47 @@ public class RLCParalelo {
         }
     }
 
-
     public double funcionTSobreAmortiguada (double a1, double a2, double s1, double s2, double t){
         double funcionFinal =  a1*Math.pow(Math.E,s1*t) + a2*Math.pow(Math.E,s2*t);
+        return funcionFinal;
+    }
+    public static List<Double> ConstanteCorrienteCriticamente( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
+        double alpha = 1/(2*resistencia*capacitancia);
+        double a2 = corrienteI;
+        double a1 = (voltajeI/inductancia) +(alpha*corrienteI) ;
+        return Arrays.asList(a1,a2);
+    }
+    public static List<Double> ConstanteVoltCriticamente( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
+        double alpha = 1/(2*resistencia*capacitancia);
+        double a2 = voltajeI;
+        double calculo1 = -(voltajeI/resistencia)-corrienteI;
+        double a1 = ((calculo1)/capacitancia) +(alpha*voltajeI) ;
+        return Arrays.asList(a1,a2);
+    }
+    public double funcionTCriticamenteAmortiguada (double a1, double a2, double alpha, double t){
+        double funcionFinal = (a1*t +a2) *Math.pow(Math.E,-alpha * t);
+        return funcionFinal;
+    }
+    public static List<Double> ConstanteCorrienteSub( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
+        double omega0= 1/Math.sqrt(inductancia*capacitancia);
+        double alpha = 1/(2*resistencia*capacitancia);
+        double omegad= Math.sqrt(Math.pow(omega0,2)- Math.pow(alpha,2));
+        double a1 = corrienteI;
+        double calculo1 = (voltajeI/inductancia)+(alpha*a1);
+        double a2 = calculo1/omegad;
+        return Arrays.asList(a1,a2,omegad);
+    }
+    public static List<Double> ConstanteVoltSub( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
+        double omega0= 1/Math.sqrt(inductancia*capacitancia);
+        double alpha = 1/(2*resistencia*capacitancia);
+        double omegad= Math.sqrt(Math.pow(omega0,2)- Math.pow(alpha,2));
+        double a1 = voltajeI;
+        double calculo1 = (-corrienteI/capacitancia)+(alpha*a1);
+        double a2 = calculo1/omegad;
+        return Arrays.asList(a1,a2,omegad);
+    }
+    public double funcionTSubAmortiguada (double a1, double a2, double alpha,double omegad, double t){
+        double funcionFinal = (a1*Math.cos(omegad*t) + a2*Math.sin(omegad*t)) * Math.pow(Math.E,-alpha*t)  ;
         return funcionFinal;
     }
     public static List<Double> resolverEcuacion(double a1, double b1, double c1, double a2, double b2, double c2) {

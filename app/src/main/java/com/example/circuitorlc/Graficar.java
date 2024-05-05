@@ -93,9 +93,54 @@ public class Graficar extends AppCompatActivity {
             lblInformacion.setText("Alpha: "+ String.format("%.2f",alpha) + " Omega: "+ String.format("%.2f", omega)
             +"\n "+tipoFuncion+"\n"+funcionResultante );
         } else if (alpha==omega) {
-            lblTipoGrafica.setText("Circuito RLC Paralelo criticamenteamortiguado");
+
+            lblTipoGrafica.setText("Circuito RLC Paralelo \n Criticamente amortiguado");
+            List<Double> arrayConstantes;
+            if (seleccion==0){
+                arrayConstantes =  paralelo.ConstanteVoltCriticamente(r,l,c,i0,v0);//para calcular el voltaje en el inductor
+                complemento = "v(t)";
+                tipoFuncion ="Funcion v(t) en el capacitor";
+            }else {
+                arrayConstantes =  paralelo.ConstanteCorrienteCriticamente(r,l,c,i0,v0);//para calcular el voltaje en el inductor
+                complemento = "i(t)";
+                tipoFuncion ="Funcion i(t) en el inductor";
+            }
+            assert  arrayConstantes!=null;
+            double a1 = arrayConstantes.get(0);
+            double a2 = arrayConstantes.get(1);
+            funcionResultante =  String.format(complemento+"=(%s *t+ %s)e^(-%s*t)",df.format(a1),df.format(a2),df.format(alpha));
+            for (double t = -1; t <= 5; t += 0.001) {
+                double y = paralelo.funcionTCriticamenteAmortiguada(a1,a2,alpha,t); // Calcula la función f(x) que desees
+                funGrafica.appendData(new DataPoint(t, y), true, 5000);
+                //fungrafica es una "coleccion" de puntos calculados, el cual por cada iteracion del for se agrega
+            }
+            lblInformacion.setText("Alpha: "+ String.format("%.2f",alpha) + " Omega: "+ String.format("%.2f", omega)
+                    +"\n "+tipoFuncion+"\n"+funcionResultante );
         } else if (alpha<omega) {
-            lblTipoGrafica.setText("Circuito RLC Paralelo subamortiguado");
+            lblTipoGrafica.setText("Circuito RLC Paralelo Subamortiguado");
+            List<Double> arrayConstantes;
+            if (seleccion==0){
+                arrayConstantes =  paralelo.ConstanteCorrienteSub(r,l,c,i0,v0);//para calcular el voltaje en el inductor
+                complemento = "v(t)";
+                tipoFuncion ="Funcion v(t) en el capacitor";
+            }else {
+                arrayConstantes =  paralelo.ConstanteVoltSub(r,l,c,i0,v0);//para calcular el voltaje en el inductor
+                complemento = "i(t)";
+                tipoFuncion ="Funcion i(t) en el inductor";
+            }
+            assert  arrayConstantes!=null;
+            double a1 = arrayConstantes.get(0);
+            double a2 = arrayConstantes.get(1);
+            double omegad = arrayConstantes.get(2);
+            funcionResultante =  String.format(complemento+"= (%s *cos(%s*t) + %s sen(%s*t) )e^(-%s*t)",df.format(a1),df.format(omegad),
+                    df.format(a2),df.format(omegad),df.format(alpha));
+            for (double t = -1; t <= 5; t += 0.001) {
+                double y = paralelo.funcionTSubAmortiguada(a1,a2,alpha,omegad,t); // Calcula la función f(x) que desees
+                funGrafica.appendData(new DataPoint(t, y), true, 5000);
+                //fungrafica es una "coleccion" de puntos calculados, el cual por cada iteracion del for se agrega
+            }
+            lblInformacion.setText("Alpha: "+ String.format("%.2f",alpha) + " Omega: "+ String.format("%.2f", omega) +" Omegad "+
+                    String.format("%.2f",omegad)  +"\n "+tipoFuncion+"\n"+funcionResultante );
         }
 
 
