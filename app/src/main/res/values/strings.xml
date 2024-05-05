@@ -14,4 +14,11 @@
     <string name="Paralelo">Paralelo</string>
     <string name="Btn_Calcular">Mostrar grafica</string>
     <string name="Lbl_Tiempo">Tiempo final (s)</string>
+    <string name="seleccion">Elija la funcion a graficar</string>
+    <string name="rbVolt">V(t) en Capacitor</string>
+    <string name="rbCorriente">I(t) en Inductor</string>
+    <!--> Activity de grafica </-->
+    <string name="tituloGraf">Titulo</string>
+    <string name="datosNecesario">Datos</string>
+
 </resources>

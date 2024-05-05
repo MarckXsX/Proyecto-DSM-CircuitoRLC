@@ -1,12 +1,17 @@
 package com.example.circuitorlc
 
+import android.R.id.message
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
 
 lateinit var TipoCircuito: TextView
 
@@ -16,9 +21,10 @@ lateinit var Capacitor: EditText
 lateinit var Corriente: EditText
 lateinit var Voltaje: EditText
 lateinit var BotonCalcular: Button
-lateinit var TxtTiempo : EditText
+lateinit var rbVolt: RadioButton
+lateinit var rbCorriente: RadioButton
 lateinit var Foto: ImageView
-
+lateinit var radioGroup: RadioGroup
 class DatosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +50,17 @@ class DatosActivity : AppCompatActivity() {
         Capacitor = findViewById(R.id.TxtCapacitor)
         Corriente = findViewById(R.id.TxtCorriente)
         Voltaje = findViewById(R.id.TxtVoltaje)
-        TxtTiempo = findViewById(R.id.txtTiempoFinal)
+        radioGroup = findViewById(R.id.rgroup)
+        rbVolt= findViewById(R.id.rbCapactorV)
+        rbCorriente = findViewById(R.id.rbInductorI)
 
 
+        var seleccion = if (radioGroup.checkedRadioButtonId == rbCorriente.id) 1 else 0
 
+        // Listener para actualizar 'seleccion' según el RadioButton seleccionado
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            seleccion = if (checkedId == rbCorriente.id) 1 else 0
+        }
         val intentGraf = Intent(this,Graficar::class.java)
         BotonCalcular = findViewById(R.id.btnGraficar)
         BotonCalcular.setOnClickListener {
@@ -56,15 +69,40 @@ class DatosActivity : AppCompatActivity() {
             val capacitancia = Capacitor.text.toString()
             val voltI = Voltaje.text.toString()
             val corrienteI = Corriente.text.toString()
-            val tiempo = TxtTiempo.text.toString()
-            intentGraf.putExtra("R",r)
-            intentGraf.putExtra("L", inductancia)
-            intentGraf.putExtra("C", capacitancia)
-            intentGraf.putExtra("v0",voltI)
-            intentGraf.putExtra("i0",corrienteI)
-            intentGraf.putExtra("tf",tiempo)
-            startActivity(intentGraf)
+
+            if(r == ""||inductancia==""|| voltI==""||corrienteI==""){
+                showAlertDialog("Campos incompletos", "Por favor, complete todos los campos.")
+            }
+            else{
+                intentGraf.putExtra("R",r)
+                intentGraf.putExtra("L", inductancia)
+                intentGraf.putExtra("C", capacitancia)
+                intentGraf.putExtra("v0",voltI)
+                intentGraf.putExtra("i0",corrienteI)
+                intentGraf.putExtra("rb",seleccion)
+                startActivity(intentGraf)
+
+            }
+
         }
+    }
+    private fun isFieldEmpty(editText: EditText): Boolean {
+        return editText.text.toString().trim().isEmpty()
+    }
+
+    // Método para mostrar un AlertDialog
+    private fun showAlertDialog(title: String, message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                // Acción al hacer clic en "OK" (por ejemplo, cerrar el diálogo)
+                dialog.dismiss()
+            }
+
+        // Crear y mostrar el diálogo
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 
 }
