@@ -104,6 +104,7 @@ public class Graficar extends AppCompatActivity {
                 arrayConstantes =  paralelo.ConstanteCorrienteCriticamente(r,l,c,i0,v0);//para calcular el voltaje en el inductor
                 complemento = "i(t)";
                 tipoFuncion ="Funcion i(t) en el inductor";
+
             }
             assert  arrayConstantes!=null;
             double a1 = arrayConstantes.get(0);
