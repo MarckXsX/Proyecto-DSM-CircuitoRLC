@@ -80,6 +80,7 @@ class DatosActivity : AppCompatActivity() {
                 intentGraf.putExtra("v0",voltI)
                 intentGraf.putExtra("i0",corrienteI)
                 intentGraf.putExtra("rb",seleccion)
+                intentGraf.putExtra("seleccion",datoRecibido)
                 startActivity(intentGraf)
 
             }
