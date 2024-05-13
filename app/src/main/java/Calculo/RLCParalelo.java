@@ -13,6 +13,7 @@ public class RLCParalelo {
         double omega = (1)/(Math.sqrt(inductancia*capacitancia));
         return omega;
     }
+    //Corregido
     public static List<Double> ConstantesVoltSobreAmortiguado( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
         double alpha = 1/(2*resistencia*capacitancia);
         double omega0= 1/Math.sqrt(inductancia*capacitancia);
@@ -20,17 +21,19 @@ public class RLCParalelo {
         double s2 = -alpha - Math.sqrt(Math.pow(alpha,2)-Math.pow(omega0,2));
         /*
         * A1+A2 = voltajeI ==> a1x + b1y = c1
-        * s1A1 + s2A2 = (-(corrienteI))/capacitancia ==> a2x + b2y = c2
+        * s1A1 + s2A2 = Ir+Il/C ==> a2x + b2y = c2
         * */
         double A1 = 1, A2 = 1;
-        double C2 = (-(corrienteI))/capacitancia;
-        List<Double> solution = resolverEcuacion(A1,A2, voltajeI, s1, s2, C2);
+        double C1 = voltajeI;
+        double C2 = ((voltajeI/resistencia)+(corrienteI))/(capacitancia);
+        List<Double> solution = resolverEcuacion(A1,A2, C1, s1, s2, C2);
         if (solution == null) {
             return  null;
         } else {
             return  Arrays.asList(solution.get(0),solution.get(1),s1,s2);
         }
     }
+    //No necesario modificar
     public List<Double> ConstantesCorrienteSobreAmortiguado(double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI){
         double alpha = this.calcAlpha(resistencia,capacitancia);
         double omega0= this.calcOmega(inductancia,capacitancia);
@@ -55,23 +58,26 @@ public class RLCParalelo {
         double funcionFinal =  a1*Math.pow(Math.E,s1*t) + a2*Math.pow(Math.E,s2*t);
         return funcionFinal;
     }
+    //No necesario modificar
     public static List<Double> ConstanteCorrienteCriticamente( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
         double alpha = 1/(2*resistencia*capacitancia);
         double a2 = corrienteI;
-        double a1 = (voltajeI/inductancia) +(alpha*corrienteI) ;
+        double a1 = (voltajeI/inductancia) +(alpha*a2) ;
         return Arrays.asList(a1,a2);
     }
+    //Modificado
     public static List<Double> ConstanteVoltCriticamente( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
         double alpha = 1/(2*resistencia*capacitancia);
         double a2 = voltajeI;
-        double calculo1 = -(voltajeI/resistencia)-corrienteI;
-        double a1 = ((calculo1)/capacitancia) +(alpha*voltajeI) ;
+        double calculo1 = (voltajeI/resistencia)+corrienteI;
+        double a1 = ((calculo1)/capacitancia) +(alpha*a2) ;
         return Arrays.asList(a1,a2);
     }
     public double funcionTCriticamenteAmortiguada (double a1, double a2, double alpha, double t){
         double funcionFinal = (a1*t +a2) *Math.pow(Math.E,-alpha * t);
         return funcionFinal;
     }
+    //No necesario modificar
     public static List<Double> ConstanteCorrienteSub( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
         double omega0= 1/Math.sqrt(inductancia*capacitancia);
         double alpha = 1/(2*resistencia*capacitancia);
@@ -81,12 +87,13 @@ public class RLCParalelo {
         double a2 = calculo1/omegad;
         return Arrays.asList(a1,a2,omegad);
     }
+    //Modificado
     public static List<Double> ConstanteVoltSub( double resistencia, double inductancia, double capacitancia, double corrienteI, double voltajeI ){
         double omega0= 1/Math.sqrt(inductancia*capacitancia);
         double alpha = 1/(2*resistencia*capacitancia);
         double omegad= Math.sqrt(Math.pow(omega0,2)- Math.pow(alpha,2));
         double a1 = voltajeI;
-        double calculo1 = (-corrienteI/capacitancia)+(alpha*a1);
+        double calculo1 = ((voltajeI/resistencia)+(corrienteI)/capacitancia)+(alpha*a1);
         double a2 = calculo1/omegad;
         return Arrays.asList(a1,a2,omegad);
     }
